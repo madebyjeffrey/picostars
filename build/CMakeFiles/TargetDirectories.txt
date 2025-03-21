@@ -1,0 +1,3 @@
+/Users/jdrake/Projects/CLionProjects/picostars/build/CMakeFiles/PicoStars.dir
+/Users/jdrake/Projects/CLionProjects/picostars/build/CMakeFiles/edit_cache.dir
+/Users/jdrake/Projects/CLionProjects/picostars/build/CMakeFiles/rebuild_cache.dir
