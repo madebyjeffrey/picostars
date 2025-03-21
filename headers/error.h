@@ -11,23 +11,24 @@
 #include <string>
 #include <string_view>
 #include <format>
+#include <utility>
 
-
-class Error {
-private:
+class Error final : public std::exception {
+public:
     std::string _description;
-    
-    Error(std::string description) : _description(description) {
+
+    explicit Error(std::string description) : _description(std::move(description)) {
     }
+
 public:
     template<typename... Args>
-    friend auto make_error(std::string_view format, Args&&... args) -> Error;
+    friend auto error(std::string_view format, Args &&... args) -> Error;
 };
 
 
 template<typename... Args>
-auto make_error(std::string_view format, Args&&... args) -> Error {
-    return std::vformat(format, std::make_format_args(args...));
+auto error(const std::string_view format, Args &&... args) -> Error {
+    return Error{std::vformat(format, std::make_format_args(args...))};
 }
 
 #endif

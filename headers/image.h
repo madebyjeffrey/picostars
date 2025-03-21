@@ -15,16 +15,16 @@
 #include "loader.h"
 #include "error.h"
 
-class ImageAsset {
+class Image {
 private:
-    std::unique_ptr<SDL_Texture*> _texture;
-    
+    std::unique_ptr<SDL_Surface *> _surface;
+
 public:
-    ImageAsset(SDL_Renderer *renderer, std::string asset): _texture(nullptr) {
+    Image(std::string asset): _surface(nullptr) {
         auto maybe_asset = load_texture_asset(renderer, asset);
-        
+
         if (maybe_asset.has_value()) {
-//            _texture = std::make_unique(maybe_asset.value());
+            //            _texture = std::make_unique(maybe_asset.value());
         } else {
             throw make_error("Cannot load asset {}", asset);
         }
