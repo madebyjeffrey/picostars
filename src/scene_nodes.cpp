@@ -6,24 +6,35 @@
 
 #include "scene_nodes.h"
 
-auto resolve_with_alignment(int parent, int child, std::variant<alignment, int> position) -> int {
-    return std::visit([&parent, &child]<typename T0>(T0 &&pos) -> int {
-        using T = std::decay_t<T0>;
+auto resolve_with_alignment(int parent, int child, AlignmentOffset location) -> int {
+    const double parentSize = static_cast<double>(parent);
+    const double childSize = static_cast<double>(child);
 
-        if constexpr (std::is_same_v<T, alignment>) {
-            switch (pos) {
-                case alignment::centre:
-                    return (parent - child) / 2;
-                case alignment::end:
-                    return parent - child;
-                case alignment::start:
-                default:
-                    return 0;
-            }
+    double base = 0.0;
+
+    switch (location.align) {
+        case alignment::centre:
+            base = (parent - child) / 2.0;
+        case alignment::end:
+            base = parent - child;
+        case alignment::start:
+        default:
+            base = 0.0;
+    }
+
+    double offset = std::visit([&parentSize](auto &&arg) -> double {
+        using T = std::decay_t<decltype(arg)>;
+
+        if constexpr (std::is_same_v<T, pc>) {
+            return parentSize * (arg.value / 100.0);
+        } else if constexpr (std::is_same_v<T, px>) {
+            return arg.value;
         } else {
-            return pos;
+            return static_cast<double>(arg);
         }
-    }, position);
+    }, location.offset);
+
+    return static_cast<int>(lround(base + offset));
 }
 
 auto image_node::get_size() const -> size {

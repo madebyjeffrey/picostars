@@ -10,11 +10,12 @@
 
 #include "alignment.h"
 
+
 class scene_node {
 public:
     virtual ~scene_node() = default;
 
-    position location;
+    AlignmentOffset2D location;
     float scale;
 
     [[nodiscard]] virtual auto get_size() const -> size = 0;
@@ -24,7 +25,7 @@ public:
     virtual auto render(const std::shared_ptr<SDL_Renderer> &renderer, rect parent) -> void = 0;
 
 protected:
-    scene_node(position location, float scale) : location{location}, scale{scale} {
+    scene_node(AlignmentOffset2D location, float scale) : location{location}, scale{scale} {
     }
 };
 
@@ -32,10 +33,17 @@ class image_node : public scene_node {
 public:
     std::shared_ptr<SDL_Texture> texture;
 
-    explicit image_node() : scene_node{{alignment::start, alignment::start}, 1.0f} {
+    explicit image_node()
+        : scene_node{
+            {
+                {alignment::start, 0},
+                {alignment::start, 0}
+            },
+            1.0f
+        } {
     }
 
-    image_node(std::shared_ptr<SDL_Texture> texture, position location, float scale)
+    image_node(std::shared_ptr<SDL_Texture> texture, const AlignmentOffset2D &location, const float scale)
         : scene_node{location, scale}, texture{std::move(texture)} {
     }
 
@@ -44,7 +52,7 @@ public:
     auto render(const std::shared_ptr<SDL_Renderer> &renderer, rect parent) -> void override;
 };
 
-inline auto make_image_node(std::shared_ptr<SDL_Texture> &texture, position location,
+inline auto make_image_node(std::shared_ptr<SDL_Texture> &texture, AlignmentOffset2D location,
                             float scale) -> std::shared_ptr<image_node> {
     return std::make_shared<image_node>(std::move(texture), location, scale);
 }

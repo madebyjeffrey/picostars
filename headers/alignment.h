@@ -12,17 +12,27 @@ enum struct alignment {
     end
 };
 
-struct position {
-    std::variant<alignment, int> horizontal;
-    std::variant<alignment, int> vertical;
+struct pc {
+    double value;
+};
 
-    position(const alignment horizontal_alignment, const alignment vertical_alignment)
-        : horizontal{horizontal_alignment},
-          vertical{vertical_alignment} {
-    }
+struct px {
+    int value;
+};
 
-    position(const int x, const int y): horizontal{x}, vertical{y} {
-    }
+constexpr px operator""_px(unsigned long long int value) { return {static_cast<int>(value)}; }
+constexpr pc operator""_pc(long double value) { return {static_cast<double>(value)}; }
+
+using offset = std::variant<px, pc, int>;
+
+struct AlignmentOffset {
+    alignment align;
+    offset offset;
+};
+
+struct AlignmentOffset2D {
+    AlignmentOffset horizontal;
+    AlignmentOffset vertical;
 };
 
 struct point {
