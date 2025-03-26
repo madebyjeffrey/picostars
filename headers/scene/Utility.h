@@ -6,11 +6,7 @@
 #define UTILITY_H
 #include <variant>
 
-enum struct Alignment {
-    start,
-    centre,
-    end
-};
+
 
 struct pc {
     double value;

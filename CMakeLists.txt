@@ -47,6 +47,7 @@ add_executable(PicoStars
         headers/scene/LocationProvider.cpp
         headers/scene/LocationProvider.h
         headers/scene/types.h
+        headers/scene/Node.h
 )
 
 set_target_properties(PicoStars PROPERTIES INSTALL_RPATH

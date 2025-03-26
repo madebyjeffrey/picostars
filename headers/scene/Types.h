@@ -9,6 +9,12 @@
 
 #include "SDL3/SDL.h"
 
+enum struct Alignment {
+    kStart,
+    kCentre,
+    kEnd
+};
+
 template<typename T>
 concept Num = std::is_integral_v<T> || std::is_floating_point_v<T>;
 
@@ -45,6 +51,11 @@ struct Point<T> {
         return Point<U>{static_cast<U>(x), static_cast<U>(y)};
     }
 };
+
+template<Num T>
+auto translate(const Point<T> &point, const Point<T> &translation) -> Point<T> {
+    return Point<T>{point.x + translation.x, point.y + translation.y};
+}
 
 template<Num T = int>
 struct Size {
