@@ -2,7 +2,7 @@
 // Created by Jeffrey Drake on 2025-03-21.
 //
 
-#include "title_scene.h"
+#include "TitleScene.h"
 #include "scene_nodes.h"
 #include "assets.h"
 

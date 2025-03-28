@@ -18,9 +18,11 @@ concept LocationProviderType = std::is_base_of_v<LocationProvider, T>;
 struct LocationProvider {
     virtual ~LocationProvider() = default;
 
-    virtual auto GetPosition(Rect<int> const &parent_rect, Rect<int> const &node_rect, const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> = 0;
+    virtual auto GetPosition(Rect<int> const &parent_rect, Size<int> const &node_rect,
+                             const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> = 0;
 
-    virtual auto GetOffset(const Rect<int> &node_rect, const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> {
+    virtual auto GetOffset(const Size<int> &node_rect,
+                           const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> {
         auto &&offset = [](const Alignment alignment, const int s) {
             switch (alignment) {
                 case Alignment::kStart:
@@ -50,7 +52,8 @@ struct FixedLocationProvider final : LocationProvider {
 
     FixedLocationProvider(FixedLocationProvider &&other) = default;
 
-    auto GetPosition(Rect<int> const &parent_rect, Rect<int> const &node_rect, const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> override {
+    auto GetPosition(Rect<int> const &parent_rect, Size<int> const &node_rect,
+                     const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> override {
         return translate(position, GetOffset(node_rect, content_alignment));
     }
 };
@@ -65,7 +68,8 @@ struct PercentageLocationProvider final : LocationProvider {
 
     PercentageLocationProvider(PercentageLocationProvider &&other) = default;
 
-    auto GetPosition(Rect<int> const &parent_rect, Rect<int> const &node_rect, const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> override {
+    auto GetPosition(Rect<int> const &parent_rect, Size<int> const &node_rect,
+                     const std::pair<Alignment, Alignment> &content_alignment) -> Point<int> override {
         Point<int> base = {
             .x = static_cast<int>(trunc(parent_rect.w * (position.x / 100.0) + parent_rect.x)),
             .y = static_cast<int>(trunc(parent_rect.h * (position.y / 100.0) + parent_rect.y))

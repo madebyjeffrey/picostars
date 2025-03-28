@@ -16,12 +16,44 @@ class Node {
     std::unique_ptr<LocationProvider> location_provider_;
     std::unique_ptr<NodeContent> content_;
     std::pair<Alignment, Alignment> content_alignment_;
+    int z_index_;
+    std::string name_;
 
-    public:
+public:
     Node() = default;
+
+    [[nodiscard]] LocationProvider &GetLocationProvider() const noexcept {
+        return *location_provider_;
+    }
+
+    [[nodiscard]] NodeContent &GetContent() const noexcept {
+        return *content_;
+    }
+
+    [[nodiscard]] const std::string &GetName() const noexcept {
+        return name_;
+    }
+
+    [[nodiscard]] const std::pair<Alignment, Alignment> &GetContentAlignment() const noexcept {
+        return content_alignment_;
+    }
+
+    [[nodiscard]] int GetZIndex() const noexcept {
+        return z_index_;
+    }
+
+    Node &WithName(std::string name) {
+        name_ = std::move(name);
+        return *this;
+    }
 
     Node &WithContentAlignment(Alignment horizontal, Alignment vertical) {
         content_alignment_ = {horizontal, vertical};
+        return *this;
+    }
+
+    Node &WithZIndex(int z_index) {
+        z_index_ = z_index;
         return *this;
     }
 
@@ -46,10 +78,12 @@ class Node {
         return *this;
     }
 
-
+    auto Render(std::unique_ptr<SDL_Renderer> const &renderer, Rect<int> const &parent) const -> void {
+        auto position = location_provider_->GetPosition(parent, content_->GetSize(), content_alignment_);
+        Rect<int> destination = Rect<int>::make(position, content_->GetSize());
+        content_->Render(renderer, destination);
+    }
 };
-
-
 
 #endif //NODE_H
 

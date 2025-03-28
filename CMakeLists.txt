@@ -40,14 +40,15 @@ add_executable(PicoStars
         headers/alignment.h
         headers/scene_nodes.h
         src/scene_nodes.cpp
-        headers/title_scene.h
-        src/title_scene.cpp
+        headers/TitleScene.h
+        src/TitleScene.cpp
         headers/node.cpp
         headers/node.h
         headers/scene/LocationProvider.cpp
         headers/scene/LocationProvider.h
         headers/scene/types.h
         headers/scene/Node.h
+        headers/scene/Scene.h
 )
 
 set_target_properties(PicoStars PROPERTIES INSTALL_RPATH

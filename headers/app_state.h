@@ -8,7 +8,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "scene_nodes.h"
-#include "title_scene.h"
+#include "TitleScene.h"
 
 struct AppState {
     std::shared_ptr<SDL_Window> window;
